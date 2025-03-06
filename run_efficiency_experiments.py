@@ -93,7 +93,7 @@ def run_efficiency_experiments():
     print("Generating constraints...")
     cfgen = CostFunctionGenerator()
     # The correct method from your original code
-    constraints = cfgen.extractor.extract_constraints(instruction, env)
+    constraints = cfgen.extractor.extract_constraints(instruction, env, include_visualization=True)
     print(f"Extracted constraints: {constraints}")
     
     # Visualize grid with constraints

@@ -96,6 +96,11 @@ class ConstraintExtractor:
         
         context = f"Grid size: {env_dict['width']}x{env_dict['height']}\n"
         
+        # Add start and goal positions if available
+        if hasattr(environment, 'start') and hasattr(environment, 'goal'):
+            context += f"Start position: {environment.start}\n"
+            context += f"Goal position: {environment.goal}\n"
+        
         # Describe regions more concisely
         if env_dict['regions']:
             context += "Defined regions:\n"
@@ -109,7 +114,7 @@ class ConstraintExtractor:
         return context
     
     def _create_environment_visualization(self, environment) -> str:
-        """Create a smaller visualization of the environment"""
+        """Create a smaller visualization of the environment with start/goal positions"""
         plt.figure(figsize=(5, 5))  # Smaller figure size
         
         # Create a colored grid for visualization
@@ -139,8 +144,15 @@ class ConstraintExtractor:
                         vis_grid[y, x] = color
         
         plt.imshow(vis_grid)
+        
+        # Add start and goal positions if available
+        if hasattr(environment, 'start') and hasattr(environment, 'goal'):
+            plt.plot(environment.start[0], environment.start[1], 'go', markersize=10, label='Start')
+            plt.plot(environment.goal[0], environment.goal[1], 'ro', markersize=10, label='Goal')
+            plt.legend(loc='upper right', fontsize='small')
+        
         plt.grid(False)  # Turn off grid to reduce image size
-        plt.title("Grid")
+        plt.title("Grid with Regions")
         
         # Save to bytes buffer with higher compression
         buf = io.BytesIO()
@@ -164,7 +176,8 @@ class ConstraintExtractor:
         "{instruction}"
         
         # Task
-        Extract constraints from this instruction for robot navigation.
+        Extract constraints from this instruction for robot navigation from start to goal.
+        Consider the start and goal positions when determining which regions to prefer or avoid.
         
         # IMPORTANT: ONLY RETURN A JSON OBJECT WITH EXACTLY THIS FORMAT:
         {{
