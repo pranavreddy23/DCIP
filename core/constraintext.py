@@ -17,7 +17,7 @@ class ConstraintSet(BaseModel):
     preference: Dict[str, float] = Field(default_factory=dict, description="Regions to prefer")
 
 class ConstraintExtractor:
-    def __init__(self, model="deepseek-r1-distill-llama-70b", api_key="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"):
+    def __init__(self, model="deepseek-r1-distill-llama-70b", api_key="key"):
         """Initialize with Groq client for Llama 3.1"""
         self.client = Groq(api_key=api_key)
         self.model = model
